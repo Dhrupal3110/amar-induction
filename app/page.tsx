@@ -386,7 +386,7 @@ export default function AmarInductionWebsite() {
                       <p className="text-gray-600">
                         Plot No.26/2, Oscar industrial Park-2
                         <br />
-                        Ribdan, Rajkot
+                        Ribda, Rajkot
                         <br />
                         Gujrat 360311, India
                       </p>
