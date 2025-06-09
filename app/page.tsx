@@ -363,8 +363,7 @@ export default function AmarInductionWebsite() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-[#444] mb-1">Phone</h4>
-                      <p className="text-gray-600">+91 98765 43210</p>
-                      <p className="text-gray-600">+91 87654 32109</p>
+                      <p className="text-gray-600">+91 76001 34687</p>
                     </div>
                   </div>
 
@@ -374,7 +373,6 @@ export default function AmarInductionWebsite() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-[#444] mb-1">Email</h4>
-                      <p className="text-gray-600">info@amarinduction.com</p>
                       <p className="text-gray-600">sales@amarinduction.com</p>
                     </div>
                   </div>
@@ -386,11 +384,11 @@ export default function AmarInductionWebsite() {
                     <div>
                       <h4 className="font-semibold text-[#444] mb-1">Address</h4>
                       <p className="text-gray-600">
-                        Industrial Area, Phase-II
+                        Plot No.26/2, Oscar industrial Park-2
                         <br />
-                        Sector 25, Gurgaon
+                        Ribdan, Rajkot
                         <br />
-                        Haryana 122001, India
+                        Gujrat 360311, India
                       </p>
                     </div>
                   </div>
@@ -400,10 +398,10 @@ export default function AmarInductionWebsite() {
               <div className="bg-[#005f99] text-white rounded-lg p-8">
                 <h3 className="text-xl font-semibold mb-4">Why Choose Amar Induction?</h3>
                 <ul className="space-y-3 text-blue-100">
-                  <li className="flex items-center space-x-2">
+                  {/* <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>25+ years of industry experience</span>
-                  </li>
+                  </li> */}
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>ISO certified manufacturing processes</span>

@@ -1,13 +1,13 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
-})
+});
 
 export const metadata: Metadata = {
   title: "Amar Induction - Precision Through Induction | Induction Melting & Hardening Solutions",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Amar Induction",
     images: [
       {
-        url: "/placeholder.svg?height=630&width=1200",
+        url: "/og-image.png", 
         width: 1200,
         height: 630,
         alt: "Amar Induction - Industrial Solutions",
@@ -36,8 +36,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Amar Induction - Precision Through Induction",
-    description: "Leading manufacturer and exporter of advanced induction melting and hardening solutions.",
-    images: ["/placeholder.svg?height=630&width=1200"],
+    description:
+      "Leading manufacturer and exporter of advanced induction melting and hardening solutions.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -51,15 +52,15 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "your-google-verification-code", // ✅ Replace with actual code when available
   },
-    generator: 'v0.dev'
-}
+  generator: "v0.dev",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -69,5 +70,5 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>{children}</body>
     </html>
-  )
+  );
 }
