@@ -9,13 +9,12 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          blue: '#4A00E0',
-          pink: '#DD41C4',
-          purple: '#8E2DE2', // This is your main accent
+          orange: '#EA5B21', // Your Primary Color
+          red: '#C73C15',    // For Gradients
         },
         neutral: {
-          charcoal: '#22222A', // For text
-          gray: '#F4F4F7',     // For backgrounds
+          charcoal: '#262626', // For Text
+          white: '#FAFAFA',     // For Backgrounds
         },
       },
       animation: {
