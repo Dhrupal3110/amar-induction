@@ -2,7 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico', // The classic ICO file
     apple: '/apple-icon.png', // The Apple touch icon
   },
-  
+
   // Optional: For Progressive Web App (PWA) features
-  manifest: '/manifest.json', 
+  manifest: '/manifest.json',
   openGraph: {
     title: "Amar Induction - Precision Through Induction",
     description:
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: "Amar Induction",
     images: [
       {
-        url: "/favicon.ico", 
+        url: "/favicon.ico",
         width: 1200,
         height: 630,
         alt: "Amar Induction - Industrial Solutions",
@@ -74,12 +74,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://amarinduction.com" />
-      </Head>
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.className} antialiased bg-background text-foreground selection:bg-primary selection:text-white`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

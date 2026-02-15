@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { sendInquiry } from "@/app/actions";
+import { cn } from "@/lib/utils";
 
 // The initial state for our form
 const initialState = {
@@ -14,40 +15,70 @@ const initialState = {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button 
-      type="submit" 
+    <button
+      type="submit"
       disabled={pending}
-      // --- Color Update: Button now uses the orange and red brand colors ---
-      className="w-full bg-brand-orange text-white py-4 px-6 rounded-lg font-bold text-lg hover:bg-brand-red transition-colors duration-300 transform hover:scale-105 disabled:bg-gray-400 disabled:scale-100 disabled:cursor-not-allowed"
+      className="w-full bg-primary text-white py-4 px-6 rounded-lg font-bold text-lg hover:bg-brand-red transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:bg-muted disabled:scale-100 disabled:cursor-not-allowed shadow-lg shadow-primary/20"
     >
-      {pending ? "Submitting..." : "Submit Inquiry"}
+      {pending ? "Submitting Request..." : "Submit Inquiry"}
     </button>
   );
 }
 
-
-export function InquiryForm() {
+export function InquiryForm({ className }: { className?: string }) {
   const [state, formAction] = useActionState(sendInquiry, initialState);
 
   return (
-    <form action={formAction} className="space-y-5">
-      {/* --- Color Update: Focus ring is now brand-orange --- */}
-      <input type="text" name="name" required className="w-full px-4 py-3 bg-neutral-white border border-gray-200/70 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent" placeholder="Full Name *" />
-      <input type="email" name="email" required className="w-full px-4 py-3 bg-neutral-white border border-gray-200/70 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent" placeholder="Email Address *" />
-      <textarea name="message" rows={4} required className="w-full px-4 py-3 bg-neutral-white border border-gray-200/70 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-transparent resize-vertical" placeholder="Your Message... *"></textarea>
-      
+    <form action={formAction} className={cn("space-y-6", className)}>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label htmlFor="name" className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-muted-foreground/50"
+            placeholder="John Doe"
+          />
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-muted-foreground/50"
+            placeholder="john@example.com"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="message" className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Your Message</label>
+        <textarea
+          name="message"
+          id="message"
+          rows={5}
+          required
+          className="w-full px-4 py-3 bg-secondary/50 border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-muted-foreground/50 resize-y"
+          placeholder="Tell us about your requirements..."
+        ></textarea>
+      </div>
+
       <SubmitButton />
 
       {/* --- User Feedback Messages --- */}
       {state.success && (
-        <p className="text-green-600 font-semibold mt-4 text-center">
-          Thank you! Your inquiry has been sent successfully.
-        </p>
+        <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg text-green-500 text-center font-medium animate-fade-in">
+          Thank you! Your inquiry has been sent successfully. Our team will contact you shortly.
+        </div>
       )}
       {state.error && (
-        <p className="text-red-600 font-semibold mt-4 text-center">
+        <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-center font-medium animate-fade-in">
           {state.error}
-        </p>
+        </div>
       )}
     </form>
   );
