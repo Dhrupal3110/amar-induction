@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ChevronDown, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { categories } from "@/lib/data";
@@ -33,15 +34,13 @@ export function Header() {
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 relative z-50">
-                        {/* Logo Placeholder */}
-                        <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center text-white shrink-0">
-                            <span className="font-bold text-xl">A</span>
-                        </div>
-                        <span className={cn("text-lg md:text-2xl font-bold tracking-tighter uppercase truncate max-w-[200px] md:max-w-none",
-                            isScrolled ? "text-foreground" : "text-foreground md:text-white"
-                        )}>
-                            Amar <span className="text-primary">Induction</span>
-                        </span>
+                        <Image
+                            src="/default.png"
+                            alt="Amar Induction Logo"
+                            width={144}
+                            height={144}
+                            className="w-144 h-144 object-contain rounded-sm"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
