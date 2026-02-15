@@ -4,6 +4,7 @@ import { StatsCounter } from "@/components/sections/StatsCounter";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Factory, Globe, ShieldCheck, Users } from "lucide-react";
 import type { Metadata } from 'next';
+import { founder, testimonials } from "@/lib/data";
 
 export const metadata: Metadata = {
     title: "About Us | Amar Induction",
@@ -55,7 +56,7 @@ export default function AboutPage() {
             </section>
 
             <StatsCounter />
-            <FounderSection />
+            <FounderSection founder={founder} />
 
             {/* Values Section */}
             <section className="py-20 bg-card border-t border-border">
@@ -78,7 +79,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <Testimonials />
+            <Testimonials testimonials={testimonials} />
         </div>
     );
 }
