@@ -1,12 +1,17 @@
-
-import { products } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, Phone, Mail } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Phone } from "lucide-react";
 import type { Metadata } from 'next';
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import type { Product } from "@/lib/data";
 
-// 1. Generate Static Params for all products
+// 1. Generate Static Params for all products from Firestore
 export async function generateStaticParams() {
+    const snapshot = await getDocs(collection(db, "products"));
+    const products: Product[] = [];
+    snapshot.forEach(doc => products.push(doc.data() as Product));
+
     return products.map((product) => ({
         slug: product.slug,
     }));
@@ -15,11 +20,15 @@ export async function generateStaticParams() {
 // 2. Generate Metadata for SEO
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = await params;
-    const product = products.find((p) => p.slug === slug);
 
-    if (!product) {
+    const q = query(collection(db, "products"), where("slug", "==", slug));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
         return { title: 'Product Not Found' };
     }
+
+    const product = snapshot.docs[0].data() as Product;
 
     return {
         title: `${product.title} | Amar Induction`,
@@ -30,11 +39,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 // 3. Page Component
 export default async function ProductPage({ params }: { params: { slug: string } }) {
     const { slug } = await params;
-    const product = products.find((p) => p.slug === slug);
 
-    if (!product) {
+    const q = query(collection(db, "products"), where("slug", "==", slug));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
         notFound();
     }
+
+    const product = snapshot.docs[0].data() as Product;
 
     return (
         <div className="pt-24 pb-20">
@@ -48,16 +61,28 @@ export default async function ProductPage({ params }: { params: { slug: string }
                     {/* Image Section */}
                     <div>
                         <div className="aspect-[4/3] bg-secondary rounded-xl overflow-hidden mb-4 border border-border">
-                            {/* Placeholder */}
-                            <div className="w-full h-full bg-neutral-800 flex items-center justify-center text-neutral-500">
-                                Main Image: {product.title}
-                            </div>
+                            {/* Fetch Image */}
+                            {product.images?.[0] ? (
+                                <img
+                                    src={product.images[0]}
+                                    alt={product.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-neutral-800 flex items-center justify-center text-neutral-500">
+                                    Main Image: {product.title}
+                                </div>
+                            )}
                         </div>
                         {/* Thumbnails if multiple images */}
                         <div className="grid grid-cols-4 gap-4">
-                            {product.images.map((img, i) => (
-                                <div key={i} className="aspect-square bg-secondary rounded-lg border border-border cursor-pointer hover:border-primary">
-                                    {/* Thumb */}
+                            {product.images?.map((img, i) => (
+                                <div key={i} className="aspect-square bg-secondary rounded-lg border border-border cursor-pointer hover:border-primary overflow-hidden relative">
+                                    <img
+                                        src={img}
+                                        alt={`${product.title} view ${i + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -76,7 +101,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                                 Key Features
                             </h3>
                             <ul className="space-y-3">
-                                {product.features.map((feature, i) => (
+                                {product.features?.map((feature, i) => (
                                     <li key={i} className="flex items-start gap-3">
                                         <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                                         <span className="text-foreground/90">{feature}</span>
@@ -108,7 +133,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                     <h2 className="text-3xl font-bold mb-8 text-center">Technical Specifications</h2>
                     <div className="max-w-4xl mx-auto bg-card border border-border rounded-xl overflow-hidden">
                         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
-                            {Object.entries(product.specifications).map(([key, value], i) => (
+                            {product.specifications && Object.entries(product.specifications).map(([key, value], i) => (
                                 <div key={key} className={`flex flex-col p-6 ${i % 2 === 0 ? 'bg-secondary/30' : ''}`}>
                                     <span className="text-sm text-muted-foreground uppercase font-semibold mb-1">{key}</span>
                                     <span className="text-lg font-medium text-foreground">{value}</span>
@@ -122,7 +147,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
                 <div className="text-center">
                     <h2 className="text-3xl font-bold mb-8">Industry Applications</h2>
                     <div className="flex flex-wrap justify-center gap-4">
-                        {product.applications.map((app, i) => (
+                        {product.applications?.map((app, i) => (
                             <span key={i} className="px-6 py-3 rounded-full bg-secondary border border-border text-foreground font-medium">
                                 {app}
                             </span>

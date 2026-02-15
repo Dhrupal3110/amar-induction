@@ -1,10 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { founder } from "@/lib/data";
+import type { Founder } from "@/lib/data";
 import { motion } from "framer-motion";
 
-export function FounderSection() {
+interface FounderSectionProps {
+    founder: Founder;
+}
+
+export function FounderSection({ founder }: FounderSectionProps) {
     return (
         <section className="py-24 bg-secondary overflow-hidden">
             <div className="container mx-auto px-4">

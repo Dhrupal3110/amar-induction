@@ -21,6 +21,27 @@ export interface Product {
   images: string[]; // URLs
 }
 
+export interface Founder {
+  name: string;
+  role: string;
+  image: string;
+  quote: string;
+  bio: string;
+}
+
+export interface Testimonial {
+  id: number | string;
+  name: string;
+  company: string;
+  content: string;
+  rating: number;
+}
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
 export const products: Product[] = [
   {
     id: "p1",
@@ -187,7 +208,7 @@ export const products: Product[] = [
   },
 ];
 
-export const founder = {
+export const founder: Founder = {
   name: "Mr. Nikunj Asodariya",
   role: "Founder & CEO",
   image: "/placeholder/founder.jpg",
@@ -203,7 +224,7 @@ export const stats = [
   {label: "Happy Clients", value: 120, suffix: "+"},
 ];
 
-export const testimonials = [
+export const testimonials: Testimonial[] = [
   {
     id: 1,
     name: "Rajesh Kumar",
@@ -230,7 +251,7 @@ export const testimonials = [
   },
 ];
 
-export const faqs = [
+export const faqs: FAQ[] = [
   {
     question: "What types of metals can your furnaces melt?",
     answer:

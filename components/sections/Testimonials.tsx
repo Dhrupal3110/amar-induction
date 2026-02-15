@@ -1,10 +1,14 @@
 "use client";
 
-import { testimonials } from "@/lib/data";
+import type { Testimonial } from "@/lib/data";
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
 
-export function Testimonials() {
+interface TestimonialsProps {
+    testimonials: Testimonial[];
+}
+
+export function Testimonials({ testimonials }: TestimonialsProps) {
     return (
         <section className="py-24 bg-neutral-900 relative">
             <div className="container mx-auto px-4">

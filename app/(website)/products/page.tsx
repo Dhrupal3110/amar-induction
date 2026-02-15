@@ -1,17 +1,40 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { products, categories } from "@/lib/data";
+import { categories, type Product } from "@/lib/data";
 import { motion, AnimatePresence } from "framer-motion";
 import { Filter, ArrowRight } from "lucide-react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 // Separate component to wrap in Suspense for useSearchParams
 function ProductListContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const currentCategory = searchParams.get("category");
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                const fetchedProducts: Product[] = [];
+                querySnapshot.forEach((doc) => {
+                    fetchedProducts.push(doc.data() as Product);
+                });
+                setProducts(fetchedProducts);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const filteredProducts = useMemo(() => {
         if (!currentCategory) return products;
@@ -19,7 +42,7 @@ function ProductListContent() {
             (p) => p.category.toLowerCase() === currentCategory.toLowerCase() ||
                 categories.find(c => c.slug === currentCategory)?.name === p.category
         );
-    }, [currentCategory]);
+    }, [currentCategory, products]);
 
     const handleCategoryChange = (slug: string | null) => {
         if (slug) {
@@ -28,6 +51,10 @@ function ProductListContent() {
             router.push("/products");
         }
     };
+
+    if (loading) {
+        return <div className="min-h-screen pt-24 text-center">Loading Products...</div>;
+    }
 
     return (
         <div className="container mx-auto px-4 py-24">
@@ -42,8 +69,8 @@ function ProductListContent() {
                             <button
                                 onClick={() => handleCategoryChange(null)}
                                 className={`w-full text-left px-4 py-3 rounded-lg transition-all ${!currentCategory
-                                        ? "bg-primary text-white font-bold"
-                                        : "hover:bg-accent text-muted-foreground"
+                                    ? "bg-primary text-white font-bold"
+                                    : "hover:bg-accent text-muted-foreground"
                                     }`}
                             >
                                 All Products
@@ -53,8 +80,8 @@ function ProductListContent() {
                                     key={cat.slug}
                                     onClick={() => handleCategoryChange(cat.slug)}
                                     className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${currentCategory === cat.slug
-                                            ? "bg-primary text-white font-bold"
-                                            : "hover:bg-accent text-muted-foreground"
+                                        ? "bg-primary text-white font-bold"
+                                        : "hover:bg-accent text-muted-foreground"
                                         }`}
                                 >
                                     <cat.icon className="w-4 h-4" />
@@ -95,14 +122,18 @@ function ProductListContent() {
                                 >
                                     <div className="h-64 bg-secondary relative overflow-hidden">
                                         {/* Placeholder image logic */}
-                                        <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-neutral-600">
-                                            Image: {product.title}
-                                        </div>
-                                        {/* <img 
-                            src={product.images[0]} 
-                            alt={product.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                        /> */}
+                                        {product.images?.[0] ? (
+                                            <img
+                                                src={product.images[0]}
+                                                alt={product.title}
+                                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center text-neutral-600">
+                                                Image: {product.title}
+                                            </div>
+                                        )}
+
                                         <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
                                             {product.category}
                                         </div>
@@ -117,7 +148,7 @@ function ProductListContent() {
                                         </p>
 
                                         <div className="space-y-4 mb-6">
-                                            {product.features.slice(0, 3).map((feat, i) => (
+                                            {product.features?.slice(0, 3).map((feat, i) => (
                                                 <div key={i} className="flex items-center gap-2 text-sm text-gray-300">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                                     {feat}

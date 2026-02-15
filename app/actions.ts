@@ -1,6 +1,8 @@
 "use server";
 
 import {Resend} from "resend";
+import {db} from "@/lib/firebase";
+import {collection, addDoc} from "firebase/firestore";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
@@ -25,6 +27,20 @@ export async function sendInquiry(
     return {success: false, error: "Please fill out all fields."};
   }
 
+  // Save to Firestore
+  try {
+    await addDoc(collection(db, "inquiries"), {
+      name,
+      email,
+      message,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Error saving inquiry to Firestore:", error);
+    // Continue execution to try sending email even if DB save fails
+  }
+
   // Custom logic for when API key is missing
   if (!resend) {
     console.log("---------------------------------------------------");
@@ -38,14 +54,6 @@ export async function sendInquiry(
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return {success: true, error: null};
-  }
-
-  if (!toEmail) {
-    // checks if toEmail is still the default fallback or empty if we strictly wanted it from env.
-    // But since I added a fallback above, this check might be redundant unless I want to enforce env var in production.
-    // For now, I'll keep it simple and assume the fallback is fine for dev.
-    // Actually, if I strictly want to block real sending without a real recipient...
-    // But let's assume if there is an API key, there should be a recipient.
   }
 
   try {
