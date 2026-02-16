@@ -4,14 +4,46 @@ import { StatsCounter } from "@/components/sections/StatsCounter";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Factory, Globe, ShieldCheck, Users } from "lucide-react";
 import type { Metadata } from 'next';
-import { founder, testimonials } from "@/lib/data";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { Founder, Testimonial } from "@/lib/data";
 
 export const metadata: Metadata = {
     title: "About Us | Amar Induction",
     description: "Learn about Amar Induction's journey, mission, and commitment to quality manufacturing.",
 };
 
-export default function AboutPage() {
+async function getFounderData(): Promise<Founder | null> {
+    try {
+        const docRef = doc(db, "settings", "founder");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data() as Founder;
+        }
+    } catch (error) {
+        console.error("Error fetching founder data:", error);
+    }
+    return null;
+}
+
+async function getTestimonialsData(): Promise<Testimonial[]> {
+    try {
+        const testimonialsRef = collection(db, "testimonials");
+        const snapshot = await getDocs(testimonialsRef);
+        return snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        })) as Testimonial[];
+    } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        return [];
+    }
+}
+
+export default async function AboutPage() {
+    const founder = await getFounderData();
+    const testimonials = await getTestimonialsData();
+
     return (
         <div>
             {/* Hero */}
@@ -56,7 +88,7 @@ export default function AboutPage() {
             </section>
 
             <StatsCounter />
-            <FounderSection founder={founder} />
+            {founder && <FounderSection founder={founder} />}
 
             {/* Values Section */}
             <section className="py-20 bg-card border-t border-border">
@@ -79,7 +111,7 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            <Testimonials testimonials={testimonials} />
+            {testimonials.length > 0 && <Testimonials testimonials={testimonials} />}
         </div>
     );
 }

@@ -47,7 +47,8 @@ export default function AdminDashboardLayout({
         { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
         { href: "/dashboard/products", label: "Products", icon: Package },
         { href: "/dashboard/inquiries", label: "Inquiries", icon: MessageSquare },
-        // { href: "/dashboard/settings", label: "Settings", icon: Settings },
+        { href: "/dashboard/testimonials", label: "Testimonials", icon: MessageSquare },
+        { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ];
 
     if (loading) {
@@ -91,8 +92,8 @@ export default function AdminDashboardLayout({
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                        ? "bg-primary/10 text-primary border border-primary/20"
-                                        : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                                    ? "bg-primary/10 text-primary border border-primary/20"
+                                    : "text-neutral-400 hover:bg-neutral-800 hover:text-white"
                                     }`}
                                 onClick={() => setSidebarOpen(false)}
                             >

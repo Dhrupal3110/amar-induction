@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef } from "react";
-import { stats } from "@/lib/data";
+import { useRef, useEffect, useState } from "react";
+import { stats as fallbackStats } from "@/lib/data";
 import { motion, useInView } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
     const ref = useRef(null);
@@ -20,6 +22,24 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export function StatsCounter() {
+    const [stats, setStats] = useState(fallbackStats);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const docRef = doc(db, "settings", "stats");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists() && docSnap.data().items) {
+                    setStats(docSnap.data().items);
+                }
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            }
+        };
+
+        fetchStats();
+    }, []);
+
     return (
         <section className="py-20 bg-secondary relative overflow-hidden">
             {/* Industrial background element */}

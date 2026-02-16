@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import type { Founder } from "@/lib/data";
 import { motion } from "framer-motion";
+import { Quote } from "lucide-react";
+import type { Founder } from "@/lib/data";
+import Image from "next/image";
 
 interface FounderSectionProps {
     founder: Founder;
@@ -10,51 +11,72 @@ interface FounderSectionProps {
 
 export function FounderSection({ founder }: FounderSectionProps) {
     return (
-        <section className="py-24 bg-secondary overflow-hidden">
+        <section className="py-16 bg-gradient-to-b from-neutral-950 to-neutral-900 border-t border-white/5">
             <div className="container mx-auto px-4">
-                <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    {/* Image Side */}
+                <div className="max-w-5xl mx-auto">
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="relative"
+                        className="group relative bg-secondary rounded-2xl border border-white/5 p-6 md:p-10 overflow-hidden"
                     >
-                        <div className="relative aspect-[4/5] rounded-lg overflow-hidden border-2 border-primary/20">
-                            {/* Use a placeholder if actual image not available */}
-                            <div className="w-full h-full bg-neutral-800 flex items-center justify-center">
-                                <span className="text-muted-foreground">Founder Image</span>
+                        {/* Background Decorations */}
+                        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+                            <Quote size={200} className="text-primary rotate-12" />
+                        </div>
+
+                        <div className="relative z-10 grid md:grid-cols-[300px_1fr] gap-8 md:gap-12 items-center">
+                            {/* Image Side */}
+                            <div className="relative mx-auto md:mx-0">
+                                <div className="relative w-64 h-64 md:w-full md:h-[350px] rounded-xl overflow-hidden shadow-2xl border border-white/10 group-hover:border-primary/30 transition-colors duration-500 bg-neutral-800">
+                                    {/* Placeholder for actual image */}
+                                    <div className="w-full h-full flex items-center justify-center bg-neutral-800">
+                                        <Image
+                                            src={founder?.image || "/placeholder/hero-poster.jpg"}
+                                            alt={founder.name}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                    </div>
+                                    {/* <Image
+                     src={founder.image}
+                     alt={founder.name}
+                     fill
+                     className="object-cover transition-transform duration-700 group-hover:scale-105"
+                   /> */}
+                                </div>
+                                {/* Decorative Elements */}
+                                <div className="absolute -inset-4 border border-primary/20 rounded-2xl -z-10 translate-x-2 translate-y-2 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform duration-500" />
                             </div>
-                            {/* <Image
-                src={founder.image}
-                alt={founder.name}
-                fill
-                className="object-cover"
-              /> */}
 
-                            {/* Decorative Frame */}
-                            <div className="absolute inset-0 border-2 border-primary/20 translate-x-4 translate-y-4 -z-10 rounded-lg"></div>
-                        </div>
-                    </motion.div>
+                            {/* Content Side */}
+                            <div className="text-center md:text-left space-y-6">
+                                <div>
+                                    <h2 className="text-primary font-medium tracking-wide text-sm uppercase mb-2">
+                                        Message from Leadership
+                                    </h2>
+                                    <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                                        {founder.name}
+                                    </h3>
+                                    <p className="text-lg text-muted-foreground">{founder.role}</p>
+                                </div>
 
-                    {/* Content Side */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">Meet the Visionary</h2>
-                        <h3 className="text-xl text-primary font-medium mb-8">{founder.name} — {founder.role}</h3>
+                                <div className="relative">
+                                    <Quote className="absolute -top-2 -left-4 text-primary/40 transform -scale-x-100 hidden md:block" size={24} />
+                                    <p className="text-lg md:text-xl text-white/90 leading-relaxed italic relative z-10">
+                                        "{founder.quote}"
+                                    </p>
+                                </div>
 
-                        <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-                            <p className="italic text-white/90 border-l-4 border-primary pl-6 py-2 text-base md:text-lg">
-                                "{founder.quote}"
-                            </p>
-                            <p className="text-base md:text-lg">{founder.bio}</p>
-                        </div>
+                                <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                                    {founder.bio}
+                                </p>
 
-                        <div className="mt-10">
-                            <img src="/signature-placeholder.png" alt="Signature" className="h-16 opacity-50 invert" />
+                                {/* Signature Placeholder */}
+                                {/* <div className="pt-4 flex justify-center md:justify-start opacity-60">
+                  <div className="h-12 w-32 bg-white/10 rounded animate-pulse" />
+                </div> */}
+                            </div>
                         </div>
                     </motion.div>
                 </div>
