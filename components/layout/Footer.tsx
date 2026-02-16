@@ -1,6 +1,7 @@
 
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { socialLinks } from "@/lib/data";
 
 export function Footer() {
     return (
@@ -18,9 +19,16 @@ export function Footer() {
                             Global leaders in manufacturing advanced induction melting, hardening, and forging solutions. Engineered for precision and built to last.
                         </p>
                         <div className="flex space-x-4">
-                            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (
-                                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all">
-                                    <Icon className="w-5 h-5" />
+                            {socialLinks.map((social, i) => (
+                                <a
+                                    key={i}
+                                    href={social.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all"
+                                    aria-label={social.name}
+                                >
+                                    <social.icon className="w-5 h-5" />
                                 </a>
                             ))}
                         </div>

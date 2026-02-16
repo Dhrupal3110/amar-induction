@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ChevronDown, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { categories } from "@/lib/data";
@@ -21,27 +22,34 @@ export function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+    }, [isMobileMenuOpen]);
+
     return (
         <header
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-                isScrolled
-                    ? "bg-background/95 backdrop-blur-md border-border py-2 shadow-lg"
-                    : "bg-transparent py-4 md:py-6"
+                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
+                isScrolled || isMobileMenuOpen
+                    ? "bg-background/95 backdrop-blur-md border-border shadow-lg"
+                    : "bg-transparent border-transparent",
+                isScrolled && !isMobileMenuOpen ? "py-2" : "py-4 md:py-6"
             )}
         >
             <div className="container mx-auto px-4 md:px-6">
                 <div className="flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 relative z-50">
-                        {/* Logo Placeholder */}
-                        <div className="w-10 h-10 bg-primary rounded-sm flex items-center justify-center text-white shrink-0">
-                            <span className="font-bold text-xl">A</span>
-                        </div>
-                        <span className={cn("text-lg md:text-2xl font-bold tracking-tighter uppercase truncate max-w-[200px] md:max-w-none",
-                            isScrolled ? "text-foreground" : "text-foreground md:text-white"
-                        )}>
-                            Amar <span className="text-primary">Induction</span>
-                        </span>
+                        <Image
+                            src="/default.png"
+                            alt="Amar Induction Logo"
+                            width={144}
+                            height={144}
+                            className="w-144 h-144 object-contain rounded-sm"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -145,7 +153,7 @@ export function Header() {
                         </a>
 
                         <button
-                            className="lg:hidden p-2 text-foreground md:text-white bg-background/50 md:bg-transparent rounded-md"
+                            className="lg:hidden p-2 text-foreground md:text-white z-50 relative"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             aria-label="Toggle Menu"
                         >
@@ -163,7 +171,7 @@ export function Header() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-0 top-[60px] bg-background z-40 px-6 py-8 overflow-y-auto lg:hidden border-t border-border shadow-inner"
+                        className="fixed inset-0 top-0 left-0 w-full h-screen bg-background z-40 px-6 pb-8 pt-24 overflow-y-auto lg:hidden border-t border-border shadow-inner"
                     >
                         <div className="flex flex-col space-y-6">
                             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-foreground border-b border-border pb-2">Home</Link>

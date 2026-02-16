@@ -27,33 +27,40 @@ export function ProductShowcase() {
                     </Link>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {categories.map((cat, i) => (
-                        <Link key={cat.slug} href={`/products?category=${cat.slug}`}>
+                        <Link key={cat.slug} href={`/products?category=${cat.slug}`} className="group">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: i * 0.1 }}
-                                className="group relative h-[300px] rounded-2xl overflow-hidden border border-white/10 bg-neutral-900 hover:border-primary/50 transition-colors"
+                                className="relative h-full min-h-[280px] p-8 rounded-3xl bg-neutral-900/40 border border-white/5 overflow-hidden transition-all duration-500 hover:border-primary/50 hover:bg-neutral-900/80 hover:shadow-[0_0_30px_-5px_var(--primary)]"
                             >
-                                {/* Background Image Placeholder - In real app use cat.image */}
-                                <div className="absolute inset-0 bg-neutral-900/50 group-hover:bg-neutral-900/70 transition-colors z-10"></div>
-                                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10 z-0"></div>
+                                {/* Background Gradients */}
+                                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-primary/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-32 h-32 bg-white/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                                {/* Content */}
-                                <div className="absolute inset-0 p-8 flex flex-col justify-end z-20">
-                                    <div className="w-12 h-12 bg-primary text-white rounded-lg flex items-center justify-center mb-4 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                        <cat.icon className="w-6 h-6" />
+                                <div className="relative z-10 flex flex-col h-full">
+                                    {/* Icon */}
+                                    <div className="mb-6 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/10 text-primary group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                                        <cat.icon className="w-7 h-7" />
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-white mb-2 transform translate-y-0 group-hover:-translate-y-2 transition-transform duration-300">
-                                        {cat.name}
-                                    </h3>
+                                    {/* Text Content */}
+                                    <div className="mt-auto">
+                                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:translate-x-1 transition-transform duration-300">
+                                            {cat.name}
+                                        </h3>
+                                        <p className="text-neutral-400 text-base leading-relaxed mb-6 group-hover:text-neutral-300 transition-colors duration-300">
+                                            Advanced {cat.name.toLowerCase()} solutions engineering for high efficiency.
+                                        </p>
 
-                                    <p className="text-white/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0">
-                                        Explore {cat.name.toLowerCase()} systems &rarr;
-                                    </p>
+                                        <div className="flex items-center text-sm font-semibold text-primary/90 tracking-wide group-hover:text-primary transition-colors">
+                                            Explore Solutions
+                                            <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                                        </div>
+                                    </div>
                                 </div>
                             </motion.div>
                         </Link>

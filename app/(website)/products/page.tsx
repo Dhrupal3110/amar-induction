@@ -9,6 +9,75 @@ import { Filter, ArrowRight } from "lucide-react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
+
+// Mobile Filter Component (Horizontal Scroll)
+const MobileCategoryFilter = ({
+    currentCategory,
+    onCategoryChange
+}: {
+    currentCategory: string | null;
+    onCategoryChange: (slug: string | null) => void;
+}) => (
+    <div className="flex gap-3 overflow-x-auto py-4 -mx-4 px-4 md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <button
+            onClick={() => onCategoryChange(null)}
+            className={`whitespace-nowrap px-4 py-2 rounded-full border text-sm font-medium transition-colors ${!currentCategory
+                ? "bg-primary text-white border-primary"
+                : "bg-background text-muted-foreground border-border hover:border-primary hover:text-primary"
+                }`}
+        >
+            All Products
+        </button>
+        {categories.map((cat) => (
+            <button
+                key={cat.slug}
+                onClick={() => onCategoryChange(cat.slug)}
+                className={`flex items-center gap-2 whitespace-nowrap px-4 py-2 rounded-full border text-sm font-medium transition-colors ${currentCategory === cat.slug
+                    ? "bg-primary text-white border-primary"
+                    : "bg-background text-muted-foreground border-border hover:border-primary hover:text-primary"
+                    }`}
+            >
+                <cat.icon className="w-4 h-4" />
+                {cat.name}
+            </button>
+        ))}
+    </div>
+);
+
+// Desktop Filter Component (Vertical Sidebar)
+const DesktopCategoryFilter = ({
+    currentCategory,
+    onCategoryChange
+}: {
+    currentCategory: string | null;
+    onCategoryChange: (slug: string | null) => void;
+}) => (
+    <div className="space-y-2">
+        <button
+            onClick={() => onCategoryChange(null)}
+            className={`w-full text-left px-4 py-3 rounded-lg transition-all ${!currentCategory
+                ? "bg-primary text-white font-bold"
+                : "hover:bg-accent text-muted-foreground"
+                }`}
+        >
+            All Products
+        </button>
+        {categories.map((cat) => (
+            <button
+                key={cat.slug}
+                onClick={() => onCategoryChange(cat.slug)}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${currentCategory === cat.slug
+                    ? "bg-primary text-white font-bold"
+                    : "hover:bg-accent text-muted-foreground"
+                    }`}
+            >
+                <cat.icon className="w-4 h-4" />
+                {cat.name}
+            </button>
+        ))}
+    </div>
+);
+
 // Separate component to wrap in Suspense for useSearchParams
 function ProductListContent() {
     const searchParams = useSearchParams();
@@ -58,37 +127,28 @@ function ProductListContent() {
 
     return (
         <div className="container mx-auto px-4 py-24">
-            <div className="flex flex-col md:flex-row gap-12">
-                {/* Sidebar Filter */}
-                <aside className="w-full md:w-64 flex-shrink-0">
+            <div className="flex flex-col md:flex-row md:gap-12">
+                {/* Mobile Filter (Horizontal Scroll) */}
+                <div className="md:hidden w-full mb-8">
+                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                        <Filter className="w-4 h-4 text-primary" /> Categories
+                    </h3>
+                    <MobileCategoryFilter
+                        currentCategory={currentCategory}
+                        onCategoryChange={handleCategoryChange}
+                    />
+                </div>
+
+                {/* Desktop Sidebar Filter */}
+                <aside className="hidden md:block w-64 flex-shrink-0">
                     <div className="sticky top-24">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
                             <Filter className="w-5 h-5 text-primary" /> Filter by Category
                         </h3>
-                        <div className="space-y-2">
-                            <button
-                                onClick={() => handleCategoryChange(null)}
-                                className={`w-full text-left px-4 py-3 rounded-lg transition-all ${!currentCategory
-                                    ? "bg-primary text-white font-bold"
-                                    : "hover:bg-accent text-muted-foreground"
-                                    }`}
-                            >
-                                All Products
-                            </button>
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat.slug}
-                                    onClick={() => handleCategoryChange(cat.slug)}
-                                    className={`w-full text-left px-4 py-3 rounded-lg transition-all flex items-center gap-3 ${currentCategory === cat.slug
-                                        ? "bg-primary text-white font-bold"
-                                        : "hover:bg-accent text-muted-foreground"
-                                        }`}
-                                >
-                                    <cat.icon className="w-4 h-4" />
-                                    {cat.name}
-                                </button>
-                            ))}
-                        </div>
+                        <DesktopCategoryFilter
+                            currentCategory={currentCategory}
+                            onCategoryChange={handleCategoryChange}
+                        />
                     </div>
                 </aside>
 

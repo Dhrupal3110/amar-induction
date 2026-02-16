@@ -1,6 +1,7 @@
 
 import { InquiryForm } from "@/components/InquiryForm";
 import { Mail, MapPin, Phone, Clock } from "lucide-react";
+import { socialLinks } from "@/lib/data";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -76,12 +77,40 @@ export default function ContactPage() {
                                     </p>
                                 </div>
                             </div>
+
+                            <div className="flex items-start gap-4">
+                                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary shrink-0">
+                                    <div className="grid grid-cols-2 gap-0.5">
+                                        <div className="w-2 h-2 bg-current rounded-full" />
+                                        <div className="w-2 h-2 bg-current rounded-full" />
+                                        <div className="w-2 h-2 bg-current rounded-full" />
+                                        <div className="w-2 h-2 bg-current rounded-full" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-foreground mb-3">Follow Us</h3>
+                                    <div className="flex gap-4">
+                                        {socialLinks.map((social, i) => (
+                                            <a
+                                                key={i}
+                                                href={social.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center hover:bg-primary hover:text-white transition-all text-muted-foreground"
+                                                aria-label={social.name}
+                                            >
+                                                <social.icon className="w-5 h-5" />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Google Map Embed */}
                         <div className="mt-12 w-full h-64 bg-secondary rounded-xl overflow-hidden border border-border">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d118260.67280807856!2d70.73889!3d22.15579!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395835ea6ba60751%3A0xc6e4b95d038ea8f3!2sRibda%2C%20Gujarat%20360311!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3696.531564909696!2d70.77310907638889!3d22.105699649918733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3958370038f3c033%3A0x8b732295fd1f4e5e!2sAmar%20Induction!5e0!3m2!1sen!2sin!4v1771165950413!5m2!1sen!2sin"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
@@ -89,6 +118,7 @@ export default function ContactPage() {
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
                             ></iframe>
+
                         </div>
                     </div>
 

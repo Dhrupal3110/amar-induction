@@ -6,6 +6,9 @@ import {
   Hammer,
   Gem,
   Thermometer,
+  Instagram,
+  Facebook,
+  Store,
 } from "lucide-react";
 
 export interface Product {
@@ -281,4 +284,22 @@ export const categories = [
   {name: "Brazing", icon: Flame, slug: "brazing"},
   {name: "Jewellery", icon: Gem, slug: "jewellery"},
   {name: "Heating", icon: Thermometer, slug: "heating"},
+];
+
+export const socialLinks = [
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/amar_induction/",
+    icon: Instagram,
+  },
+  {
+    name: "Facebook",
+    url: "https://www.facebook.com/profile.php?id=61579929251538",
+    icon: Facebook,
+  },
+  {
+    name: "Indiamart",
+    url: "https://www.indiamart.com/amar-induction/",
+    icon: Store,
+  },
 ];
