@@ -2,7 +2,14 @@
 
 import {Resend} from "resend";
 import {db} from "@/lib/firebase";
-import {collection, addDoc} from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
@@ -76,5 +83,65 @@ export async function sendInquiry(
   } catch (error) {
     console.error(error);
     return {success: false, error: "Something went wrong. Please try again."};
+  }
+}
+
+// --- Founder Settings Actions ---
+export async function updateFounderSettings(data: any) {
+  try {
+    const docRef = doc(db, "settings", "founder");
+    await setDoc(docRef, data, {merge: true});
+    return {success: true};
+  } catch (error) {
+    console.error("Error updating founder settings:", error);
+    return {success: false, error: "Failed to update founder settings"};
+  }
+}
+
+// --- Stats Settings Actions ---
+export async function updateStatsSettings(data: any) {
+  try {
+    const docRef = doc(db, "settings", "stats");
+    await setDoc(docRef, {items: data}, {merge: true});
+    return {success: true};
+  } catch (error) {
+    console.error("Error updating stats settings:", error);
+    return {success: false, error: "Failed to update stats settings"};
+  }
+}
+
+// --- Testimonials Actions ---
+export async function createTestimonial(data: any) {
+  try {
+    await addDoc(collection(db, "testimonials"), {
+      ...data,
+      createdAt: new Date().toISOString(),
+    });
+    return {success: true};
+  } catch (error) {
+    console.error("Error creating testimonial:", error);
+    return {success: false, error: "Failed to create testimonial"};
+  }
+}
+
+export async function updateTestimonial(id: string, data: any) {
+  try {
+    const docRef = doc(db, "testimonials", id);
+    await updateDoc(docRef, data);
+    return {success: true};
+  } catch (error) {
+    console.error("Error updating testimonial:", error);
+    return {success: false, error: "Failed to update testimonial"};
+  }
+}
+
+export async function deleteTestimonial(id: string) {
+  try {
+    const docRef = doc(db, "testimonials", id);
+    await deleteDoc(docRef);
+    return {success: true};
+  } catch (error) {
+    console.error("Error deleting testimonial:", error);
+    return {success: false, error: "Failed to delete testimonial"};
   }
 }
